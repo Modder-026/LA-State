@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA-State RP | Premium FiveM Roleplay Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 0.5rem 2rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23001122" width="1200" height="600"/><polygon fill="%23002244" points="0,0 600,300 1200,0 1200,600 0,600"/><circle fill="%2300d4ff" opacity="0.1" cx="200" cy="150" r="100"/><circle fill="%230099cc" opacity="0.1" cx="800" cy="400" r="150"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00d4ff, #0099cc, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #00d4ff;
+        }
+
+        .btn-secondary:hover {
+            background: #00d4ff;
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: #00d4ff;
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #00d4ff, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #00d4ff;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00d4ff;
+        }
+
+        /* Rules Section */
+        .rules {
+            padding: 5rem 2rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .rules-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .rule-category {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .rule-category:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .rule-category h3 {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rule-icon {
+            font-size: 1.8rem;
+        }
+
+        .rule-description {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .rule-doc-frame {
+            width: 100%;
+            height: 400px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            background: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .doc-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .doc-link {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .doc-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .doc-link-secondary {
+            background: transparent;
+            border: 2px solid #00d4ff;
+        }
+
+        .doc-link-secondary:hover {
+            background: #00d4ff;
+        }
+        .team {
+            padding: 5rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            border-color: #00d4ff;
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Join Section */
+        .join {
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .join-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .server-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .server-ip {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00d4ff;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #00d4ff;
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            padding-top: 2rem;
+            color: #888;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Particles Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00d4ff;
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">LA-State RP</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#regelwerk">Regelwerk</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#join">Beitreten</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>LA-State RP</h1>
+            <p>Das ultimative FiveM Roleplay Erlebnis in Los Angeles</p>
+            <div class="cta-buttons">
+                <a href="#join" class="btn btn-primary">Jetzt Spielen</a>
+                <a href="#features" class="btn btn-secondary">Mehr Erfahren</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats animate-on-scroll">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" data-count="0">0</div>
+                <div>Aktive Spieler</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="24">0</div>
+                <div>Slots Online</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="5">0</div>
+                <div>Custom Scripts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="99">0</div>
+                <div>Uptime %</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container animate-on-scroll">
+            <h2 class="section-title">Server Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚗</div>
+                    <h3>Lore-Friendly Fahrzeuge</h3>
+                    <p>Über 400 einzigartige Lore-Friendly Fahrzeuge mit realistischen Handling und Sound. Von Supersportwagen bis hin zu Arbeitstrucks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏢</div>
+                    <h3>Realistische Jobs</h3>
+                    <p>Werde Polizist, Medic, Mechaniker oder starte dein eigenes Business. Verdiene Geld durch legale und illegale Aktivitäten.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏠</div>
+                    <h3>Housing System</h3>
+                    <p>Kaufe und gestalte dein eigenes Haus. Vom Apartment bis zur Villa - verwirkliche deinen Traum vom perfekten Zuhause.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>Rechtssystem</h3>
+                    <p>Realistische Gesetze und Konsequenzen. Professionelle Polizei und Justiz sorgen für Ordnung in der Stadt.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Wirtschaft</h3>
+                    <p>Dynamisches Wirtschaftssystem mit Banken, Investitionen und Handel. Baue dein Business-Imperium auf.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎭</div>
+                    <h3>Events & RP</h3>
+                    <p>Regelmäßige Events, Storylines und hochwertiges Roleplay mit erfahrenen Spielern und Staff.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regelwerk Section -->
+    <section class="rules" id="regelwerk">
+        <div class="rules-container animate-on-scroll">
+            <h2 class="section-title">Regelwerk</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto; color: #ccc; font-size: 1.2rem; margin-bottom: 3rem;">
+                Unsere Regeln sorgen für ein faires und respektvolles Miteinander. Bitte lies sie sorgfältig durch, bevor du dem Server beitrittst.
+            </p>
+            
+            <div class="rules-grid">
+                <div class="rule-category">
+                    <h3><span class="rule-icon">📋</span>Allgemeine Regeln</h3>
+                    <p class="rule-description">
+                        Grundlegende Verhaltensregeln für alle Spieler auf dem Server. Diese Regeln gelten für alle Bereiche des Servers.
+                    </p>
+                    <iframe class="rule-doc-frame" 
+                            src="https://docs.google.com/document/d/103Jr_PidSxLXsvtvLQ7ZoEy_vvyTJYDIwCCTCuecQzc/edit?usp=sharing"
+                            frameborder="0">
+                    </iframe>
+                    <div class="doc-links">
+                        <a href="https://docs.google.com/document/d/103Jr_PidSxLXsvtvLQ7ZoEy_vvyTJYDIwCCTCuecQzc/edit?usp=sharing" 
+                           class="doc-link" target="_blank">
+                            📄 Vollständig Lesen
+                        </a>
+                        <a href="https://docs.google.com/document/d/103Jr_PidSxLXsvtvLQ7ZoEy_vvyTJYDIwCCTCuecQzc/export?format=pdf" 
+                           class="doc-link doc-link-secondary" target="_blank">
+                            📥 Als PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rule-category">
+                    <h3><span class="rule-icon">🚔</span>Polizei Regeln</h3>
+                    <p class="rule-description">
+                        Spezielle Regelungen für Polizei-Roleplay, Verhaftungen, Durchsuchungen und den Umgang mit Verdächtigen.
+                    </p>
+                    <iframe class="rule-doc-frame" 
+                            src="https://docs.google.com/document/d/1_vO1hftFnpjmc5D5WbzfD4Dn052AxGsyWrtuaKcH_vI/edit?usp=sharing"
+                            frameborder="0">
+                    </iframe>
+                    <div class="doc-links">
+                        <a href="https://docs.google.com/document/d/1_vO1hftFnpjmc5D5WbzfD4Dn052AxGsyWrtuaKcH_vI/edit?usp=sharing" 
+                           class="doc-link" target="_blank">
+                            📄 Vollständig Lesen
+                        </a>
+                        <a href="https://docs.google.com/document/d/1_vO1hftFnpjmc5D5WbzfD4Dn052AxGsyWrtuaKcH_vI/export?format" 
+                           class="doc-link doc-link-secondary" target="_blank">
+                            📥 Als PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rule-category">
+                    <h3><span class="rule-icon">🏥</span>Medic Regeln</h3>
+                    <p class="rule-description">
+                        Richtlinien für Sanitäter und Ärzte, Behandlungsverfahren und medizinisches Roleplay.
+                    </p>
+                    <iframe class="rule-doc-frame" 
+                            src="https://docs.google.com/document/d/1fs0ExC9qWt18An2hGXfLuDvSEB2UXHSkjTcRtUgKGmM/edit?usp=sharing"
+                            frameborder="0">
+                    </iframe>
+                    <div class="doc-links">
+                        <a href="https://docs.google.com/document/d/1fs0ExC9qWt18An2hGXfLuDvSEB2UXHSkjTcRtUgKGmM/edit?usp=sharing" 
+                           class="doc-link" target="_blank">
+                            📄 Vollständig Lesen
+                        </a>
+                        <a href="https://docs.google.com/document/d/1fs0ExC9qWt18An2hGXfLuDvSEB2UXHSkjTcRtUgKGmM/export?format" 
+                           class="doc-link doc-link-secondary" target="_blank">
+                            📥 Als PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rule-category">
+                    <h3><span class="rule-icon">🔫</span>Illegale Fraktionsregeln</h3>
+                    <p class="rule-description">
+                        Regeln für Illegale Fraktionen, illegale Aktivitäten, Revierkämpfe und kriminelles Roleplay.
+                    </p>
+                    <iframe class="rule-doc-frame" 
+                            src="https://docs.google.com/document/d/13rk0eOs0U299kaIPBveJl1dHv7uLJPVnqmW_ij5Ka6g/edit?usp=sharing"
+                            frameborder="0">
+                    </iframe>
+                    <div class="doc-links">
+                        <a href="https://docs.google.com/document/d/13rk0eOs0U299kaIPBveJl1dHv7uLJPVnqmW_ij5Ka6g/edit?usp=sharing" 
+                           class="doc-link" target="_blank">
+                            📄 Vollständig Lesen
+                        </a>
+                        <a href="https://docs.google.com/document/d/13rk0eOs0U299kaIPBveJl1dHv7uLJPVnqmW_ij5Ka6g/export?format" 
+                           class="doc-link doc-link-secondary" target="_blank">
+                            📥 Als PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rule-category">
+                    <h3><span class="rule-icon">💼</span>Business Regeln</h3>
+                    <p class="rule-description">
+                        Richtlinien für Unternehmen, Handel, Immobilien und wirtschaftliche Aktivitäten.
+                    </p>
+                    <iframe class="rule-doc-frame" 
+                            src="https://docs.google.com/document/d/1xGHkO5Wt1kF4llrKXfSO7zuCBTQmAzNnoq4eJK4Jr5w/edit?usp=sharing"
+                            frameborder="0">
+                    </iframe>
+                    <div class="doc-links">
+                        <a href="https://docs.google.com/document/d/1xGHkO5Wt1kF4llrKXfSO7zuCBTQmAzNnoq4eJK4Jr5w/edit?usp=sharing" 
+                           class="doc-link" target="_blank">
+                            📄 Vollständig Lesen
+                        </a>
+                        <a href="https://docs.google.com/document/d/1xGHkO5Wt1kF4llrKXfSO7zuCBTQmAzNnoq4eJK4Jr5w/export?format" 
+                           class="doc-link doc-link-secondary" target="_blank">
+                            📥 Als PDF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="rule-category">
+                    <h3><span class="rule-icon">⚖️</span>Strafen & Sanktionen</h3>
+                    <p class="rule-description">
+                        Übersicht über mögliche Strafen bei Regelverstößen und das Beschwerdeverfahren.
+                    </p>
+                    <iframe class="rule-doc-frame" 
+                            src="https://docs.google.com/document/d/1gibVnG9bgTkVVgDfg16Ndy1g7m3fvMpViXo7MCdm4cI/edit?usp=sharing"
+                            frameborder="0">
+                    </iframe>
+                    <div class="doc-links">
+                        <a href="https://docs.google.com/document/d/1gibVnG9bgTkVVgDfg16Ndy1g7m3fvMpViXo7MCdm4cI/edit?usp=sharing" 
+                           class="doc-link" target="_blank">
+                            📄 Vollständig Lesen
+                        </a>
+                        <a href="https://docs.google.com/document/d/1gibVnG9bgTkVVgDfg16Ndy1g7m3fvMpViXo7MCdm4cI/export?format=pdf" 
+                           class="doc-link doc-link-secondary" target="_blank">
+                            📥 Als PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 20px; border: 1px solid rgba(0, 212, 255, 0.2);">
+                <h3 style="color: #00d4ff; margin-bottom: 1rem;">📞 Fragen zu den Regeln?</h3>
+                <p style="color: #ccc; margin-bottom: 1.5rem;">
+                    Falls du Fragen zu unseren Regeln hast, wende dich gerne an unser Support-Team.
+                </p>
+                <div class="cta-buttons">
+                    <a href="https://discord.gg/ratZtXPvq2" class="btn btn-primary" target="_blank">Discord Support</a>
+                    <a href="https://discord.com/channels/1394254864430661662/1394254867887030286" target="_blank" class="btn btn-secondary">📩 Support-Ticket öffnen</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="animate-on-scroll">
+            <h2 class="section-title">Unser Team</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">EG</div>
+                    <h3>Evan Ghost</h3>
+                    <p>Server Owner & Entwicklung</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">AW</div>
+                    <h3>Alan Wolf</h3>
+                    <p>Projektinhaber</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">HD</div>
+                    <h3>Developer</h3>
+                    <p>Script Entwicklung</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">RR</div>
+                    <h3>Richard Richter</h3>
+                    <p>TeamManagement & Moderation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Section -->
+    <section class="join" id="join">
+        <div class="join-content animate-on-scroll">
+            <h2 class="section-title">Werde Teil von LA-State</h2>
+            <p>Starte dein neues Leben in Los Santos. Erstelle deinen Charakter und tauche ein in die beste Roleplay-Community Deutschlands.</p>
+            
+            <div class="server-info">
+                <h3>Server Information</h3>
+                <div class="server-ip">Server IP: connect la-state.de</div>
+                <p>VoiceChat: IngameVoice</p>
+                <p>Discord: discord.gg/ratZtXPvq2</p>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="fivem://connect/la-state.de" class="btn btn-primary">Direkt Verbinden</a>
+                <a href="https://discord.gg/ratZtXPvq2" class="btn btn-secondary">Discord Beitreten</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>LA-State RP</h3>
+                <p>Das beste FiveM Roleplay Erlebnis in Deutschland</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#rules">Regelwerk</a>
+                <a href="#forum">Forum</a>
+                <a href="#support">Support</a>
+                <a href="#donate">Spenden</a>
+            </div>
+            <div class="footer-section">
+                <h3>Community</h3>
+                <a href="https://discord.gg/ratZtXPvq2">Discord</a>
+                <a href="https://twitch.com/lastaterp">Twitch</a>
+                <a href="https://youtube.com/@GhostLAState">YouTube</a>
+            </div>
+            <div class="footer-section">
+                <h3>Rechtliches</h3>
+                <a href="#impressum">Impressum</a>
+                <a href="#datenschutz">Datenschutz</a>
+                <a href="#agb">AGB</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 LA-State RP. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Counter animation
+        const animateCounters = () => {
+            const counters = document.querySelectorAll('[data-count]');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const increment = target / 100;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = Math.floor(current);
+                        setTimeout(updateCounter, 20);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                updateCounter();
+            });
+        };
+
+        // Trigger counter animation when stats section is visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        // Particles effect
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 6000);
+            }, 300);
+        }
+
+        // Initialize particles
+        createParticles();
+
+        // Add some dynamic effects
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.cursor');
+            if (!cursor) {
+                const newCursor = document.createElement('div');
+                newCursor.className = 'cursor';
+                newCursor.style.cssText = `
+                    position: fixed;
+                    width: 20px;
+                    height: 20px;
+                    background: radial-gradient(circle, rgba(0,212,255,0.8) 0%, transparent 70%);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 9999;
+                    transition: transform 0.1s ease;
+                `;
+                document.body.appendChild(newCursor);
+            }
+            
+            const cursorEl = document.querySelector('.cursor');
+            cursorEl.style.left = (e.clientX - 10) + 'px';
+            cursorEl.style.top = (e.clientY - 10) + 'px';
+        });
+    </script>
+</body>
+</html>
